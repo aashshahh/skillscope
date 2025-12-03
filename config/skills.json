@@ -1,0 +1,24 @@
+{
+  "programming_languages": [
+    "python", "r", "c++", "java", "scala", "sql"
+  ],
+  "ml_frameworks": [
+    "pytorch", "tensorflow", "keras", "scikit-learn", "xgboost", "lightgbm"
+  ],
+  "data_engineering": [
+    "spark", "hadoop", "airflow", "dbt", "snowflake", "bigquery"
+  ],
+  "cloud_platforms": [
+    "aws", "azure", "gcp"
+  ],
+  "visualization_tools": [
+    "tableau", "power bi", "matplotlib", "seaborn", "plotly"
+  ],
+  "nlp_tools": [
+    "transformers", "spacy", "nltk", "huggingface"
+  ],
+  "soft_skills": [
+    "communication", "teamwork", "problem solving"
+  ]
+}
+
