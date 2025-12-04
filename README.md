@@ -150,17 +150,5 @@ JSON
 
 
 
-## Setup  
-Clone the repository and install dependencies:
-git clone https://github.com/aashshahh/skillscope.git
-cd skillscope
-pip install -r requirements.txt
-Run the scraper:
-python data_collection/test_playwright.py
-Open the analysis notebooks:
-jupyter notebook notebooks/
-
-
-
 
 
