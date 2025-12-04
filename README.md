@@ -35,7 +35,6 @@ SkillScope addresses that gap by grounding its insights in freshly scraped job d
 ```mermaid
 flowchart TD
 
-classDef wide fill=#2a2a2a,stroke=#ffffff,color=#ffffff,stroke-width=1px;
 
 A["**Job Scrapers**<br>Indeed · RemoteOK · Wellfound"]:::wide --> 
 B["**Data Cleaning**<br>Regex · Standardization · Deduping"]:::wide -->
