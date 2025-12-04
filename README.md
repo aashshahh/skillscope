@@ -35,22 +35,26 @@ SkillScope addresses that gap by grounding its insights in freshly scraped job d
 ```mermaid
 flowchart TD
 
-A[Job Scrapers<br>Indeed / RemoteOK / Wellfound] --> B[Data Cleaning<br>Regex • Deduping • Normalization]
+classDef wide fill=#2a2a2a,stroke=#ffffff,color=#ffffff,stroke-width=1px;
 
-B --> C[Skill Extraction<br>NER • Pattern Rules • Keyword Mapping]
+A["**Job Scrapers**<br>Indeed · RemoteOK · Wellfound"]:::wide --> 
+B["**Data Cleaning**<br>Regex · Standardization · Deduping"]:::wide -->
 
-C --> D[Embeddings Layer<br>Sentence-BERT • MPNet]
+C["**Skill Extraction**<br>NER · Pattern Rules · Ontology Mapping"]:::wide -->
 
-D --> E[ML Layer<br>KMeans • PCA • Similarity Models]
+D["**Embeddings Layer**<br>Sentence-BERT · MPNet"]:::wide -->
 
-E --> F[Analytics Outputs<br>Clusters • Heatmaps • Job-Fit Score]
+E["**ML Layer**<br>KMeans · PCA · Similarity Models"]:::wide -->
 
-F --> G[Interactive Dashboard<br>Streamlit / Panel]
+F["**Analytics Outputs**<br>Clusters · Heatmaps · Skill Networks · Job-Fit Score"]:::wide -->
+
+G["**Interactive Dashboard**<br>Streamlit"]:::wide
 ```
+
 
 ## Reasearch Questions 
 
-###RQ1 — How do industries differ in their semantic skill signals?
+### RQ1 — How do industries differ in their semantic skill signals?
 Job postings carry implicit meaning beyond keywords. Embeddings reveal deeper industry-specific patterns:
 finance → SQL, Airflow, risk modeling
 tech → PyTorch, transformers
