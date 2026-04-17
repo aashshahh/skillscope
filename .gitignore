@@ -1,18 +1,10 @@
-#virtual environment
 .venv/
-venv/
-
-#data files
-data/raw/*
-data/interim/*
-data/processed/*
-
-#python cache
 __pycache__/
 *.pyc
-
-#vs code settings
-.vscode/
-
-#mac system files
 .DS_Store
+node_modules/
+dist/
+.vite/
+.env
+coverage/
+.pytest_cache/
