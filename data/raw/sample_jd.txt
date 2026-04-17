@@ -1,0 +1,9 @@
+Senior Machine Learning Engineer — Acme AI
+
+Requirements:
+Python, PyTorch, TensorFlow, Kubernetes, Spark, Airflow, AWS SageMaker, MLflow
+PostgreSQL, Elasticsearch, GitHub Actions, Docker
+communication, teamwork, leadership
+
+Nice to have:
+Kafka, RAG, Weights and Biases, DVC, Triton

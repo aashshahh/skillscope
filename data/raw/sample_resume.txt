@@ -1,0 +1,19 @@
+Aash Shah
+aashshah.04@gmail.com
+
+SKILLS
+Python, JavaScript, TypeScript, SQL
+PyTorch, scikit-learn, HuggingFace Transformers, BERT, NLP, NLTK, spaCy
+Pandas, NumPy, Matplotlib, Seaborn, Plotly
+FastAPI, Flask, Node.js, REST API
+PostgreSQL, MongoDB, Redis
+AWS, Docker, GitHub Actions, Git
+React, Tailwind, HTML, CSS
+Agile, Scrum, communication, teamwork
+
+EXPERIENCE
+ML Engineer Intern — TechCorp (2023)
+Built NLP pipelines using BERT and scikit-learn, deployed with FastAPI and Docker on AWS.
+
+Data Analyst — StartupXYZ (2022)
+ETL pipelines in Python and SQL, dashboards in Plotly, worked with MongoDB.

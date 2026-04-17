@@ -1,24 +1,43 @@
 {
   "programming_languages": [
-    "python", "r", "c++", "java", "scala", "sql"
+    "python", "java", "javascript", "typescript", "c++", "c#", "golang", "rust",
+    "scala", "r", "julia", "kotlin", "swift", "ruby", "php", "bash", "shell"
   ],
   "ml_frameworks": [
-    "pytorch", "tensorflow", "keras", "scikit-learn", "xgboost", "lightgbm"
+    "pytorch", "tensorflow", "keras", "scikit-learn", "xgboost", "lightgbm",
+    "catboost", "jax", "huggingface", "transformers", "fastai", "mxnet"
+  ],
+  "nlp": [
+    "spacy", "nltk", "gensim", "bert", "gpt", "llm", "ner", "text classification",
+    "sentiment analysis", "named entity recognition", "tokenization", "embeddings",
+    "word2vec", "fasttext", "sentence-bert", "sbert"
   ],
   "data_engineering": [
-    "spark", "hadoop", "airflow", "dbt", "snowflake", "bigquery"
+    "spark", "hadoop", "kafka", "airflow", "dbt", "flink", "hive", "presto",
+    "databricks", "snowflake", "etl", "data pipeline", "data warehouse", "dask"
   ],
-  "cloud_platforms": [
-    "aws", "azure", "gcp"
+  "databases": [
+    "sql", "postgresql", "mysql", "mongodb", "redis", "elasticsearch",
+    "cassandra", "dynamodb", "bigquery", "sqlite", "neo4j", "pinecone", "faiss"
   ],
-  "visualization_tools": [
-    "tableau", "power bi", "matplotlib", "seaborn", "plotly"
+  "cloud": [
+    "aws", "gcp", "azure", "s3", "ec2", "lambda", "sagemaker", "vertex ai",
+    "azure ml", "cloud run", "kubernetes", "docker", "terraform", "ansible"
   ],
-  "nlp_tools": [
-    "transformers", "spacy", "nltk", "huggingface"
+  "mlops": [
+    "mlflow", "kubeflow", "wandb", "dvc", "bentoml", "seldon", "triton",
+    "model serving", "ci/cd", "github actions", "model monitoring", "drift detection"
+  ],
+  "visualization": [
+    "tableau", "power bi", "matplotlib", "seaborn", "plotly", "d3.js",
+    "looker", "grafana", "streamlit", "dash"
   ],
   "soft_skills": [
-    "communication", "teamwork", "problem solving"
+    "communication", "teamwork", "leadership", "problem solving", "critical thinking",
+    "project management", "agile", "scrum", "collaboration", "presentation"
+  ],
+  "web": [
+    "react", "vue", "angular", "node.js", "fastapi", "django", "flask",
+    "rest api", "graphql", "html", "css", "tailwind"
   ]
 }
-

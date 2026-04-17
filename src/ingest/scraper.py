@@ -1,44 +1,60 @@
+import time
 import requests
 import pandas as pd
+from pathlib import Path
+from loguru import logger
 
-url = "https://remoteok.com/api"
-response = requests.get(url)
-data = response.json()[1:]  # skip metadata
+REMOTEOK_URL = "https://remoteok.com/api"
+HEADERS = {"User-Agent": "SkillScope-Research/1.0"}
 
-df = pd.DataFrame(data)
-df.to_csv("remoteok_jobs.csv", index=False)
-print("Data saved successfully! Rows:", len(df))
-print(df.head(5))
-
-import re
-from bs4 import BeautifulSoup
-
-# Step 1: Clean job descriptions (remove HTML tags, lowercase, etc.)
-def clean_text(text):
-    if not isinstance(text, str):
-        return ""
-    text = BeautifulSoup(text, "html.parser").get_text()
-    return text.lower()
-
-df["description"] = df["description"].apply(clean_text)
-
-# Step 2: Extract common skill keywords
-common_skills = [
-    "python", "sql", "excel", "pandas", "numpy", "tensorflow",
-    "pytorch", "aws", "azure", "git", "java", "r", "docker",
-    "spark", "hadoop", "powerbi", "tableau", "ml", "nlp"
+ROLE_TAGS = [
+    "machine-learning", "data-science", "nlp", "python",
+    "backend", "devops", "frontend", "fullstack"
 ]
 
-def extract_skills(text):
-    return [skill for skill in common_skills if re.search(rf'\b{skill}\b', text)]
 
-df["skills"] = df["description"].apply(extract_skills)
+def fetch_remoteok(tags: list[str] | None = None) -> list[dict]:
+    logger.info("Fetching jobs from RemoteOK API...")
+    time.sleep(1)
+    resp = requests.get(REMOTEOK_URL, headers=HEADERS, timeout=15)
+    resp.raise_for_status()
+    data = resp.json()
+    jobs = [j for j in data if isinstance(j, dict) and "position" in j]
+    logger.info(f"Fetched {len(jobs)} total jobs")
+    if tags:
+        tags_lower = [t.lower() for t in tags]
+        jobs = [
+            j for j in jobs
+            if any(t in " ".join(j.get("tags", [])).lower() for t in tags_lower)
+        ]
+        logger.info(f"Filtered to {len(jobs)} jobs matching tags: {tags}")
+    return jobs
 
-# Step 3: Save cleaned version
-df[["company", "position", "location", "description", "skills"]].to_csv(
-    "jobs_with_skills.csv", index=False
-)
 
-print("✅ Skill extraction complete! Saved as jobs_with_skills.csv")
-print(df[["company", "skills"]].head(10))
+def jobs_to_dataframe(jobs: list[dict]) -> pd.DataFrame:
+    rows = []
+    for j in jobs:
+        rows.append({
+            "id": j.get("id", ""),
+            "position": j.get("position", ""),
+            "company": j.get("company", ""),
+            "description": j.get("description", ""),
+            "tags": ",".join(j.get("tags", [])),
+            "date": j.get("date", ""),
+            "url": j.get("url", ""),
+        })
+    return pd.DataFrame(rows)
 
+
+def scrape_and_save(output_path: str | Path, tags: list[str] | None = None):
+    jobs = fetch_remoteok(tags=tags)
+    df = jobs_to_dataframe(jobs)
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_path, index=False)
+    logger.info(f"Saved {len(df)} jobs to {output_path}")
+    return df
+
+
+if __name__ == "__main__":
+    scrape_and_save("data/raw/jobs.csv", tags=ROLE_TAGS)

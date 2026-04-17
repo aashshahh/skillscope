@@ -1,28 +1,27 @@
-scraping:
-  sources:
-    - indeed
-    - remoteok
-  jobs:
-    - "data scientist"
-    - "machine learning engineer"
-    - "data analyst"
-  max_pages: 10
-  request_delay:
-    min: 1
-    max: 3
+model:
+  spacy_model: en_core_web_sm
+  sbert_model: all-MiniLM-L6-v2
+  similarity_threshold: 0.65
+  top_k_skills: 30
 
-nlp:
-  model: "sentence-transformers/all-mpnet-base-v2"
+extraction:
   min_skill_length: 2
-  stopwords: "english"
-  similarity_threshold: 0.60
+  max_skill_length: 6
+  use_esco: true
+  use_pattern_rules: true
 
-ml:
-  clustering_method: "kmeans"
-  num_clusters: 12
-  dimensionality_reduction: "pca"
+gap_analysis:
+  missing_skill_threshold: 0.60
+  partial_match_threshold: 0.80
 
-paths:
-  raw_data: "data/raw"
-  interim_data: "data/interim"
-  processed_data: "data/processed"
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:5173"
+    - "http://localhost:3000"
+    - "https://aashshahh.github.io"
+
+logging:
+  level: INFO
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"
