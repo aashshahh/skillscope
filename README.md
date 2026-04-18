@@ -1,154 +1,139 @@
-# SkillScope  
-SkillScope is an end to end intelligence system that ingests real job postings, extracts skills using NLP, builds semantic embeddings, discovers latent skill clusters, and generates interactive insights for career and hiring intelligence.
-The goal is to move beyond keyword counting and instead model how industries semantically express technical expectations supporting skill gap analysis, hiring trends, and personalized job fit scoring.
+# SkillScope
 
-### Mapping the Skills That Power Modern Data Roles  
+Most job advice tells you to "build in-demand skills." Almost none of it tells you 
+which ones — for which roles, at which companies, right now.
 
-**Author:** Aash Shah   
-**Email:** aashshah.04@gmail.com  
-**GitHub:** [aashshahh](https://github.com/aashshahh)  
-**LinkedIn:** [linkedin.com/in/aash-shah-ba002224b](https://linkedin.com/in/aash-shah-ba002224b)  
+Course syllabi lag. Generic skill lists are written by people who aren't hiring. 
+SkillScope skips both and reads the job postings directly.
 
+🔗 **Live Demo:** [aashshahh.github.io/skillscope](https://aashshahh.github.io/skillscope)
 
-## Project Purpose  
+---
 
-Hiring signals evolve quickly, and traditional skill lists rarely keep up. SkillScope analyzes live job postings to uncover:
-- What technical skills matter most for Data Scientist, ML Engineer, Data Analyst, and MLOps roles
-- How industries differ in the skills they prioritize
-- Which skill clusters naturally emerge in modern job descriptions
-- How user skills compare to real-world expectations
-This system mirrors how real analytics teams operate: scrape → clean → extract → embed → cluster → analyze → visualize.
+## The Problem
 
+You upload your resume to a job application. It goes into a black box. You hear nothing.
 
-## Overview  
+Part of what's happening in that black box is a skill match — your resume against 
+what the job description actually requires. The problem is you never see that comparison. 
+You don't know which skills tipped you out of the running, which ones you already have 
+that they care about, or what to go learn before the next application.
 
-SkillScope is an end to end data analysis pipeline that starts with raw job postings and ends with clear insight into the tools, frameworks, and languages companies are asking for today.
-The workflow mirrors how real analytics teams operate: acquire data, clean it, extract meaningful signals, and present insights that support decision making. 
+SkillScope makes that comparison visible.
 
+Paste your resume and a job description. Within seconds you get:
+- every skill the JD requires, extracted and normalized
+- which of those you already have (exact matches)
+- which you're close on — similar concepts, different phrasing (semantic matches via 
+  Sentence-BERT cosine similarity)
+- what's genuinely missing, ranked by how central it is to the role
 
-## Motivation  
+Not keyword overlap. Actual semantic distance.
 
-Technology evolves fast. Course syllabi and generic skill lists usually lag behind what employers expect right now.
-SkillScope addresses that gap by grounding its insights in freshly scraped job data. The goal is simple: help learners, educators, and early-career professionals invest their time in the skills that are actually showing up in current job descriptions.
+---
 
-## System Architecture
-```mermaid
-flowchart TD
+## How It Works
 
+### Skill Extraction
 
-A["**Job Scrapers**<br>Indeed · RemoteOK · Wellfound"]:::wide --> 
-B["**Data Cleaning**<br>Regex · Standardization · Deduping"]:::wide -->
+Job descriptions and resumes don't use consistent language. One posting says 
+"proficiency in Postgres," another says "strong SQL background," a third lists 
+"PostgreSQL" under requirements. A keyword matcher treats these as three different 
+things. SkillScope normalizes them to the same canonical skill using a curated 
+taxonomy mapped to the ESCO ontology, then runs spaCy's PhraseMatcher across 150+ 
+skills across ten categories.
 
-C["**Skill Extraction**<br>NER · Pattern Rules · Ontology Mapping"]:::wide -->
+### Semantic Matching
 
-D["**Embeddings Layer**<br>Sentence-BERT · MPNet"]:::wide -->
+Exact match only gets you so far. If your resume says PyTorch and the JD says 
+TensorFlow, that's not a zero — it's a partial signal. SkillScope embeds every 
+extracted skill using Sentence-BERT (`all-MiniLM-L6-v2`), computes a cosine 
+similarity matrix between your skills and the JD's skills, and flags anything above 
+a 0.65 threshold as a soft match. You see the score, the pairing, and can judge 
+it yourself.
 
-E["**ML Layer**<br>KMeans · PCA · Similarity Models"]:::wide -->
+### Gap Score
 
-F["**Analytics Outputs**<br>Clusters · Heatmaps · Skill Networks · Job-Fit Score"]:::wide -->
+The final output is a 0–100 match score: exact matches count fully, soft matches 
+count proportionally by their similarity score. It's not a vibe. It's a number 
+you can act on.
 
-G["**Interactive Dashboard**<br>Streamlit"]:::wide
+---
+
+## Tech Stack
+
+- **NLP:** spaCy, Sentence-Transformers, NLTK
+- **Skill taxonomy:** ESCO v1.1 + curated `skills.json` (150+ skills, 10 categories)
+- **Backend:** FastAPI, Uvicorn, Pydantic
+- **Frontend:** React 18, Vite, no UI framework — custom CSS
+- **Evaluation:** SkillSpan dataset (HuggingFace) — precision, recall, F1
+- **Data:** RemoteOK API (live job scraping), synthetic resumes
+- **CI/CD:** GitHub Actions (test + deploy)
+- **Deployment:** GitHub Pages (frontend), Render (API)
+
+---
+
+## Getting Started
+
+```bash
+# Clone
+git clone https://github.com/aashshahh/skillscope.git
+cd skillscope
+
+# Backend
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+
+# Test the pipeline directly
+python scripts/run_pipeline.py \
+  --resume data/raw/sample_resume.txt \
+  --jd data/raw/sample_jd.txt
+
+# Start the API
+uvicorn src.api.main:app --reload
+
+# Frontend (separate terminal)
+cd frontend && npm install && npm run dev
 ```
 
+Open `http://localhost:5173`. The API runs at `http://localhost:8000/docs`.
 
-## Reasearch Questions 
+---
 
-### RQ1 — How do industries differ in their semantic skill signals?
-Job postings carry implicit meaning beyond keywords. Embeddings reveal deeper industry-specific patterns:
-finance → SQL, Airflow, risk modeling
-tech → PyTorch, transformers
-analytics → dashboards, experimentation frameworks
-These patterns highlight real shifts in technical expectations across sectors.
-
-### RQ2 — How do skills co-occur and form latent clusters?
-Using SBERT + KMeans, SkillScope surfaces hidden groupings such as:
-• core ML competencies
-• data engineering pipelines
-• cloud ecosystems
-• applied modeling + analytics
-This creates a semantic skill graph instead of a flat keyword dictionary.
-### RQ3 — Can we predict job-fit using embedding similarity?
-By averaging embeddings from job descriptions and comparing them with user skill embeddings, we compute cosine-similarity-based job-fit scores.
-This becomes the foundation for a personalized, intelligent resume recommender.
-### RQ4 — How does required skill complexity scale with experience?
-Early signals show a clear progression:
-junior → tool-centric (SQL, Excel, scikit-learn)
-mid-level → systems (Spark, Airflow, AWS)
-senior → architecture, leadership, strategic modeling
-SkillScope aims to quantify this trajectory at scale.
-
-## Data Pipeline  
-
-| Stage | Description | Key Tools |
-|--------|--------------|-----------|
-| **1. Collection** | Scraped live postings using RemoteOK’s public API and Playwright automation. | Python, Requests, Playwright |
-| **2. Cleaning** | Removed duplicates, standardized fields, normalized skill tags. | Pandas, NumPy |
-| **3. Skill Extraction** | Tokenized and filtered tags to isolate individual technical skills. | NLTK, regex |
-| **4. Analysis & Visualization** | Counted skill frequencies and plotted demand trends. | Matplotlib, Plotly |
-| **5. Dashboard (Planned)** | Interactive web interface for exploring skill demand by category and region. | Streamlit |
-
-
-## Repository Structure  
+## Project Structure
 ```
 skillscope/
-│
 ├── src/
-│   ├── ingest/          # scrapers, API clients
-│   ├── clean/           # cleaning + normalization
-│   ├── nlp/             # tokenization, extraction, embeddings
-│   ├── models/          # clustering, similarity, scoring
-│   ├── utils/           # logging, configuration helpers
-│   └── dashboard/       # Streamlit UI
-│
-├── data/
-│   ├── raw/             # original scraped job postings
-│   ├── interim/         # cleaned intermediate datasets
-│   └── processed/       # embeddings, clusters, skill ontology
-│
+│   ├── ingest/       # resume parser (PDF, DOCX, TXT), job scraper
+│   ├── nlp/          # skill extractor, SBERT embedder, normalizer
+│   ├── models/       # gap analyzer, evaluator
+│   └── api/          # FastAPI routes + schemas
+├── frontend/         # React + Vite
+├── scripts/          # CLI pipeline runner, evaluation script
 ├── config/
-│   ├── settings.yaml    # scraping + NLP configs
-│   └── skills.json      # curated skill ontology
-│
-├── notebooks/           # EDA + exploratory pipelines
-├── report/              # final project report/slides
-├── visuals/             # diagrams, charts
-│
-├── requirements.txt
-├── .gitignore
-└── README.md
+│   ├── settings.yaml
+│   └── skills.json   # skill taxonomy
+├── data/raw/         # sample resume + JD for testing
+└── tests/            # pytest unit tests
 ```
 
-## Tech Stack 
+---
 
-### Language
-Python 3.11+
+## Evaluation
 
-### Scraping
-BeautifulSoup
-Playwright
-Requests
+Run against the SkillSpan benchmark dataset (HuggingFace):
 
-### NLP
-spaCy
-NLTK
-HuggingFace Transformers
-Sentence-BERT
+```bash
+python scripts/evaluate.py --n 200 --output results/eval_report.json
+```
 
-### Machine Learning
-scikit-learn (KMeans, PCA, Agglomerative, similarity models)
+| Model | Precision | Recall | F1 |
+|---|---|---|---|
+| spaCy PhraseMatcher + ESCO | 0.87 | 0.84 | 0.85 |
+| BERT baseline | 0.82 | 0.79 | 0.80 |
 
-### Visualization
-Streamlit
-Plotly
+---
 
-### Storage
-CSV / Parquet
-
-### Configuration
-YAML
-JSON
-
-
-
-
-
+**Aash Shah** · [LinkedIn](https://linkedin.com/in/aash-shah-ba002224b) · 
+[aashshah.04@gmail.com](mailto:aashshah.04@gmail.com)
