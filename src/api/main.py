@@ -11,7 +11,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Root route (ADD THIS)
+# Root route
 @app.get("/")
 def root():
     return {
