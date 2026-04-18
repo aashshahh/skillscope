@@ -5,7 +5,7 @@ import ResultPanel from './components/ResultPanel.jsx'
 import axios from 'axios'
 
 const API = import.meta.env.VITE_API_URL || ''
-
+const res = await axios.post(`${API}/api/v1/analyze/text`, { ... })
 export default function App() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
