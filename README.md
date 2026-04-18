@@ -1,7 +1,7 @@
 # SkillScope
 
 Most job advice tells you to "build in-demand skills." Almost none of it tells you 
-which ones — for which roles, at which companies, right now.
+which ones, for which roles, at which companies, right now.
 
 Course syllabi lag. Generic skill lists are written by people who aren't hiring. 
 SkillScope skips both and reads the job postings directly.
@@ -14,7 +14,7 @@ SkillScope skips both and reads the job postings directly.
 
 You upload your resume to a job application. It goes into a black box. You hear nothing.
 
-Part of what's happening in that black box is a skill match — your resume against 
+Part of what's happening in that black box is a skill match your resume against 
 what the job description actually requires. The problem is you never see that comparison. 
 You don't know which skills tipped you out of the running, which ones you already have 
 that they care about, or what to go learn before the next application.
@@ -24,7 +24,7 @@ SkillScope makes that comparison visible.
 Paste your resume and a job description. Within seconds you get:
 - every skill the JD requires, extracted and normalized
 - which of those you already have (exact matches)
-- which you're close on — similar concepts, different phrasing (semantic matches via 
+- which you're close on similar concepts, different phrasing (semantic matches via 
   Sentence-BERT cosine similarity)
 - what's genuinely missing, ranked by how central it is to the role
 
