@@ -11,6 +11,15 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Root route (ADD THIS)
+@app.get("/")
+def root():
+    return {
+        "message": "SkillScope API is running",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings["api"]["cors_origins"],
